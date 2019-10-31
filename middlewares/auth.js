@@ -6,9 +6,7 @@ module.exports = (req, res, next) => {
 
   //check if no token
   if (!token)
-    return res
-      .status(401)
-      .json({ errors: [{ msg: 'No token, authorization denied' }] });
+    return res.status(401).json({ msg: 'No token, authorization denied' });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
@@ -17,6 +15,6 @@ module.exports = (req, res, next) => {
   } catch (err) {
     return res
       .status(401)
-      .json({ errors: [{ msg: 'Token is not valid, please sign in again' }] });
+      .json({ msg: 'Token is not valid, please sign in again' });
   }
 };
