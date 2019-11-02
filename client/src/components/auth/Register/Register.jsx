@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../redux/actions/alert';
+import { register } from '../../../redux/actions/auth';
+
 import PropTypes from 'prop-types';
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const initalFormData = {
     name: '',
     email: '',
@@ -23,11 +25,14 @@ const Register = ({ setAlert }) => {
     event.preventDefault();
     if (password !== password2) {
       //check if passwords match
-      setAlert('Passwords do not match', 'danger', 2000);
+      setAlert('Passwords do not match', 'danger');
     } else {
-      console.log(formData);
+      register(formData);
     }
   };
+
+  //redirect if authenticated
+  if (isAuthenticated) return <Redirect to="/dashboard" />;
 
   return (
     <div>
@@ -57,6 +62,7 @@ const Register = ({ setAlert }) => {
             placeholder="Email Address"
             name="email"
             onChange={onChangeHandler}
+            required
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -71,6 +77,7 @@ const Register = ({ setAlert }) => {
             name="password"
             minLength="6"
             onChange={onChangeHandler}
+            required
           />
         </div>
         <div className="form-group">
@@ -81,6 +88,7 @@ const Register = ({ setAlert }) => {
             name="password2"
             minLength="6"
             onChange={onChangeHandler}
+            required
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
@@ -93,10 +101,16 @@ const Register = ({ setAlert }) => {
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
 export default connect(
-  null,
-  { setAlert }
+  mapStateToProps,
+  { setAlert, register }
 )(Register);
