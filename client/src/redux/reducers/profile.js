@@ -1,4 +1,4 @@
-import { GET_PROFILE, PROFILE_ERROR } from '../types/types';
+import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE } from '../types/types';
 
 const initialState = {
   profile: null,
@@ -11,10 +11,13 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case GET_PROFILE:
-      return { ...state, ...payload };
+      return { ...state, profile: payload, loading: false };
 
     case PROFILE_ERROR:
-      return state;
+      return { ...state, error: payload, loading: false };
+    case CLEAR_PROFILE:
+      return { ...state, profile: null, repos: null, loading: true };
+
     default:
       return state;
   }

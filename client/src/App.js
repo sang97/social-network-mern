@@ -9,6 +9,7 @@ import Login from './components/auth/Login/Login';
 import Register from './components/auth/Register/Register';
 import Alert from './components/layout/Alert/Alert';
 import DashBoard from './components/dashboard/DashBoard/DashBoard';
+import CreateProfile from './components/profile-forms/CreateProfile/CreateProfile';
 
 import PrivateRoute from './routing/PrivateRoute';
 
@@ -31,12 +32,14 @@ const App = () => {
         <NavBar />
         <Route exact path="/" component={Landing} />
         <section className="container">
+          <Alert />
+
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route eaxct path="/register" component={Register} />
+            <Route exact path="/create-profile" component={CreateProfile} />
             <PrivateRoute exact path="/dashboard" component={DashBoard} />
           </Switch>
-          <Alert />
         </section>
       </Router>
     </Provider>
