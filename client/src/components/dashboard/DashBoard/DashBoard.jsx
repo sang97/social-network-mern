@@ -1,13 +1,20 @@
 import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCurrentProfile } from '../../../redux/actions/profile';
+import {
+  getCurrentProfile,
+  deleteAccount
+} from '../../../redux/actions/profile';
 import { Link } from 'react-router-dom';
 
+import DashBoardActions from '../Actions/DashBoardActions';
+import Experience from '../../dashboard/Experience/Experience';
+import Education from '../../dashboard/Education/Education';
 import Spinner from '../../layout/Spinner/Spinner';
 
 const DashBoard = ({
   getCurrentProfile,
+  deleteAccount,
   auth: { user },
   profile: { profile, loading }
 }) => {
@@ -24,13 +31,27 @@ const DashBoard = ({
         <i className="fas fa-user"></i> Welcome {user && user.name}
       </p>
       {profile !== null ? (
-        <Fragment>has</Fragment>
+        <Fragment>
+          <DashBoardActions />
+          <Experience experience={profile.experience} />
+          <Education education={profile.education} />
+          <div className="my-2">
+            <button className="btn btn-danger" onClick={() => deleteAccount()}>
+              <i className="fas fa-user-slash"></i> Delete my account
+            </button>
+          </div>
+        </Fragment>
       ) : (
         <Fragment>
-          <p>You have not yet created a profile</p>
+          <p>You have not yet created a profile. Please add some information</p>
           <Link to="/create-profile" className="btn btn-primary my-1">
             Create Profile
           </Link>
+          <div className="my-2">
+            <button className="btn btn-danger" onClick={() => deleteAccount()}>
+              <i className="fas fa-user-slash"></i> Delete my account
+            </button>
+          </div>
         </Fragment>
       )}
     </Fragment>
@@ -39,6 +60,7 @@ const DashBoard = ({
 
 DashBoard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
+  deleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 };
@@ -50,5 +72,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile }
+  { getCurrentProfile, deleteAccount }
 )(DashBoard);

@@ -1,10 +1,20 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createProfile } from '../../../redux/actions/profile';
+import {
+  createProfile,
+  getCurrentProfile
+} from '../../../redux/actions/profile';
 
-const CreateProfile = ({ createProfile, history }) => {
+import Spinner from '../../layout/Spinner/Spinner';
+
+const EditProfile = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentProfile,
+  history
+}) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -35,6 +45,41 @@ const CreateProfile = ({ createProfile, history }) => {
     instagram
   } = formData;
 
+  useEffect(() => {
+    if (loading) getCurrentProfile();
+
+    setFormData({
+      website: loading || !profile.website ? '' : profile.website,
+      location: loading || !profile.location ? '' : profile.location,
+      status: loading || !profile.status ? '' : profile.status,
+      skills: loading || !profile.skills ? '' : profile.skills.join(','),
+      githubusername:
+        loading || !profile.githubusername ? '' : profile.githubusername,
+      bio: loading || !profile.bio ? '' : profile.bio,
+      twitter:
+        loading || !profile.social || !profile.social.twitter
+          ? ''
+          : profile.social.twitter,
+      facebook:
+        loading || !profile.social || !profile.social.facebook
+          ? ''
+          : profile.social.facebook,
+      linkedin:
+        loading || !profile.social || !profile.social.linkedin
+          ? ''
+          : profile.social.linkedin,
+      youtube:
+        loading || !profile.social || !profile.social.youtube
+          ? ''
+          : profile.social.youtube,
+      instagram:
+        loading || !profile.social || !profile.social.instagram
+          ? ''
+          : profile.social.instagram,
+      company: loading || !profile.company ? '' : profile.company
+    });
+  }, [loading, profile, getCurrentProfile]);
+
   const [displaySocialInput, setDisplaySocialInput] = useState(false);
 
   const onChangeHandler = event => {
@@ -44,12 +89,14 @@ const CreateProfile = ({ createProfile, history }) => {
   const onSubmitHandler = event => {
     event.preventDefault();
 
-    createProfile(formData, history);
+    createProfile(formData, history, true);
   };
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <Fragment>
-      <h1 className="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">Edit Your Profile</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Let's get some information to make your
         profile stand out
@@ -222,11 +269,17 @@ const CreateProfile = ({ createProfile, history }) => {
   );
 };
 
-CreateProfile.propTypes = {
-  createProfile: PropTypes.func.isRequired
+EditProfile.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  profile: state.profile
+});
+
 export default connect(
-  null,
-  { createProfile }
-)(withRouter(CreateProfile));
+  mapStateToProps,
+  { createProfile, getCurrentProfile }
+)(withRouter(EditProfile));
