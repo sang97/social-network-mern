@@ -6,7 +6,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
+  CLEAR_POSTS
 } from '../types/types';
 
 import axios from 'axios';
@@ -65,6 +66,9 @@ export const register = data => async dispatch => {
 
 // Log out
 export const logout = () => async dispatch => {
+  dispatch({
+    type: CLEAR_POSTS
+  });
   dispatch({
     type: CLEAR_PROFILE
   });

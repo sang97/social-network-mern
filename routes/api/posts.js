@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middlewares/auth');
 
 const Post = require('../../models/Post');
-const Profile = require('../../models/Profile');
+// const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
 // @route   POST api/posts
@@ -140,7 +140,7 @@ router.put('/like/:postId', auth, async (req, res) => {
 // @route   POST api/posts/comment/:postId
 // @desc    Comment on a post
 // @access  Private
-router.put(
+router.post(
   '/comment/:postId',
   [
     auth,

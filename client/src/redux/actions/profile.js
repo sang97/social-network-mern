@@ -6,7 +6,8 @@ import {
   CLEAR_PROFILE,
   GET_PROFILES,
   GET_REPOS,
-  PROFILE_LOADING
+  PROFILE_LOADING,
+  CLEAR_POSTS
 } from '../types/types';
 
 import { setAlert } from './alert';
@@ -57,7 +58,7 @@ export const getAllProfiles = () => async dispatch => {
 
 //get profile by id
 export const getProfileById = userId => async dispatch => {
-  dispatch({ type: PROFILE_LOADING });
+  // dispatch({ type: PROFILE_LOADING });
   try {
     const res = await axios.get(`/api/profile/user/${userId}`);
     dispatch({
@@ -216,6 +217,9 @@ export const deleteAccount = () => async dispatch => {
 
       dispatch({
         type: CLEAR_PROFILE
+      });
+      dispatch({
+        type: CLEAR_POSTS
       });
       dispatch({
         type: ACCOUNT_DELETED
