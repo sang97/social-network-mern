@@ -8,6 +8,14 @@ const Post = require('../../models/Post');
 const User = require('../../models/User');
 const Profile = require('../../models/Profile');
 
+// check url for https://
+const checkUrl = url => {
+  if (!/^(f|ht)tps?:\/\//i.test(url)) {
+    url = 'https://' + url;
+  }
+  return url;
+};
+
 // @route   GET api/profile/me
 // @desc    Get current user profile
 // @access  Private
@@ -68,7 +76,7 @@ router.post(
     const profileFields = {};
     profileFields.user = req.user.id;
     if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
+    if (website) profileFields.website = checkUrl(website);
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (status) profileFields.status = status;
@@ -79,11 +87,11 @@ router.post(
 
     //build social object
     profileFields.social = {};
-    if (youtube) profileFields.social.youtube = youtube;
-    if (twitter) profileFields.social.twitter = twitter;
-    if (facebook) profileFields.social.facebook = facebook;
-    if (linkedin) profileFields.social.linkedin = linkedin;
-    if (instagram) profileFields.social.instagram = instagram;
+    if (youtube) profileFields.social.youtube = checkUrl(youtube);
+    if (twitter) profileFields.social.twitter = checkUrl(twitter);
+    if (facebook) profileFields.social.facebook = checkUrl(facebook);
+    if (linkedin) profileFields.social.linkedin = checkUrl(linkedin);
+    if (instagram) profileFields.social.instagram = checkUrl(instagram);
 
     try {
       let profile = Profile.findOne({ user: req.user.id });
@@ -338,7 +346,6 @@ router.get('/github/:username', (req, res) => {
 
     request(options, (error, response, body) => {
       if (error) console.error(error.message);
-
       if (response.statusCode !== 200) {
         return res.status(404).json({ msg: 'No github profile found' });
       }

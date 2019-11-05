@@ -37,7 +37,13 @@ export default (state = initialState, { type, payload }) => {
     case LOGOUT:
     case ACCOUNT_DELETED:
       localStorage.removeItem('token');
-      return { ...state, token: null, isAuthenticated: false, loading: false };
+      return {
+        ...state,
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        loading: false
+      };
     default:
       return state;
   }
