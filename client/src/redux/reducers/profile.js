@@ -31,7 +31,7 @@ export default (state = initialState, { type, payload }) => {
     case PROFILE_ERROR:
       return { ...state, error: payload, loading: false };
     case CLEAR_PROFILE:
-      return { ...state, profile: null, repos: [], loading: false };
+      return { ...state, profile: null, repos: [], loading: true };
 
     case PROFILE_LOADING:
       return { ...state, loading: true };

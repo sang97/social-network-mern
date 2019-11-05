@@ -6,7 +6,6 @@ import {
   CLEAR_PROFILE,
   GET_PROFILES,
   GET_REPOS,
-  PROFILE_LOADING,
   CLEAR_POSTS
 } from '../types/types';
 
@@ -16,7 +15,7 @@ import axios from 'axios';
 
 //get current user profile
 export const getCurrentProfile = () => async dispatch => {
-  dispatch({ type: PROFILE_LOADING });
+  dispatch({ type: CLEAR_PROFILE });
 
   try {
     const res = await axios.get('/api/profile/me');
@@ -39,8 +38,6 @@ const CONFIG = {
 //get all user profiles
 export const getAllProfiles = () => async dispatch => {
   dispatch({ type: CLEAR_PROFILE });
-
-  dispatch({ type: PROFILE_LOADING });
   try {
     const res = await axios.get('/api/profile');
     dispatch({
