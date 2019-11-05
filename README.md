@@ -9,3 +9,6 @@ cd client && npm install
 
 # Run both Express server & React from root
 npm run dev
+
+#Demos
+https://social-network-for-devs.herokuapp.com/
